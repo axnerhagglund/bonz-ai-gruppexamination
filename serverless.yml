@@ -8,7 +8,7 @@ provider:
   runtime: nodejs20.x
   region: eu-north-1
   iam:
-    role: #miljövariabel här
+    role: #miljövariabel
  
 
 functions:
@@ -16,7 +16,30 @@ functions:
     handler: functions/bookRoom/index.handler
     events:
       - httpApi:
-          path: /
+          path: /api/bookings
+          method: post
+
+  getAllRooms:
+    handler: functions/getAllRooms/index.handler
+    events:
+      - httpApi:
+          path: /api/bookings
           method: get
 
+  putRoom:
+    handler: functions/putRoom/index.handler
+    events:
+      - httpApi:
+          path: /api/bookings/{id}
+          method: put
+
+  deleteRoom:
+    handler: functions/deleteRoom/index.handler
+    events:
+      - httpApi:
+          path: /api/bookings/{id}
+          method: delete
+ 
+ 
+  
 

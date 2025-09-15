@@ -1,2 +1,3 @@
 node_modules
 .serverless
+arn:aws:iam::774322383152:role/bonzai-role
