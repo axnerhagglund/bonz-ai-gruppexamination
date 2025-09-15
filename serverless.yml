@@ -1,5 +1,5 @@
 # "org" ensures this Service is used with the correct Serverless Framework Access Key.
-org: school2024
+org: "# fe24"
 # "service" is the name of this project. This will also be added to your AWS resource names.
 service: bonzaigruppex
 
@@ -8,8 +8,7 @@ provider:
   runtime: nodejs20.x
   region: eu-north-1
   iam:
-    role: #miljövariabel
- 
+    role: arn:aws:iam::618077882319:role/lecture-role
 
 functions:
   bookRoom:
@@ -39,7 +38,21 @@ functions:
       - httpApi:
           path: /api/bookings/{id}
           method: delete
- 
- 
-  
 
+resources:
+  Resources:
+    RoomBookTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: RoomBookTable
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH # HASH = Partition key
+          - AttributeName: sk
+            KeyType: RANGE # RANGE = Sort key
+        BillingMode: PAY_PER_REQUEST
