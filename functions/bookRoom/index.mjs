@@ -12,7 +12,9 @@ export const handler = async (event) => {
   try {
     const booking = JSON.parse(event.body);
     const bookingId = nanoid(5);
-    const checkinDate = new Date().toISOString();
+    let today = new Date();
+    let checkinDate = today;
+    let checkoutDate = new Date(today);
 
     const single = Number(booking.single);
     const double = Number(booking.double);
@@ -42,10 +44,13 @@ export const handler = async (event) => {
         },
         guests: { N: String(booking.guests) },
         days: { N: String(booking.days) },
-        checkinDate: { S: checkinDate },
+        checkinDate: { S: checkinDate.toISOString() },
+        checkoutDate: { S: checkoutDate.toISOString() },
         totalPrice: { N: String(totalPrice) },
       },
     });
+
+    checkoutDate.setDate(today.getDate() + days);
 
     await client.send(command);
 
@@ -54,6 +59,8 @@ export const handler = async (event) => {
       body: JSON.stringify({
         message: "Room booked successfully!",
         totalPrice: `Total price will be ${totalPrice}`,
+        checkinDate: checkinDate,
+        checkoutDate: checkoutDate,
       }),
     };
   } catch (error) {
