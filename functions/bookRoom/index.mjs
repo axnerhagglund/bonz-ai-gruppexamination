@@ -53,6 +53,7 @@ export const handler = async (event) => {
       Item: {
         pk: { S: `BOOKING${bookingId}` },
         sk: { S: "PROFILE" },
+        booking: { S: "BOOKING " },
         name: { S: String(booking.name) },
         email: { S: String(booking.email) },
         rooms: {
