@@ -55,4 +55,13 @@ resources:
             KeyType: HASH # HASH = Partition key
           - AttributeName: sk
             KeyType: RANGE # RANGE = Sort key
+        GlobalSecondaryIndexes:
+          - IndexName: bookingIndex
+            KeySchema:
+              - AttributeName: booking
+                KeyType: HASH
+              - AttributeName: pk
+                KeyType: RANGE
+            Projection:
+              ProjectionType: INCLUDE
         BillingMode: PAY_PER_REQUEST
