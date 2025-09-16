@@ -8,6 +8,12 @@ const roomPrice = {
   suite: 1500,
 };
 
+const roomCapacity = {
+  single: 1,
+  double: 2,
+  suite: 3,
+};
+
 export const handler = async (event) => {
   try {
     const booking = JSON.parse(event.body);
@@ -21,6 +27,20 @@ export const handler = async (event) => {
     const suite = Number(booking.suite);
     const guests = Number(booking.guests);
     let days = Number(booking.days);
+
+    const maxGuests =
+      single * roomCapacity.single +
+      double * roomCapacity.double +
+      suite * roomCapacity.suite;
+
+    if (guests > maxGuests) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: `Too many guests! You booked rooms for max ${maxGuests} guests, but entered ${guests}.`,
+        }),
+      };
+    }
 
     const totalPrice =
       (single * roomPrice.single +
