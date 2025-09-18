@@ -81,6 +81,7 @@ export const handler = async (event) => {
         totalPrice: `Total price will be ${totalPrice}`,
         checkinDate: checkinDate,
         checkoutDate: checkoutDate,
+        
       }),
     };
   } catch (error) {
