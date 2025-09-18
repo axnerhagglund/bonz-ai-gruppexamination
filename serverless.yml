@@ -1,5 +1,5 @@
 # "org" ensures this Service is used with the correct Serverless Framework Access Key.
-org: fed24isabel
+org: kujje
 # "service" is the name of this project. This will also be added to your AWS resource names.
 service: bonzaigruppex
 
@@ -8,7 +8,7 @@ provider:
   runtime: nodejs20.x
   region: eu-north-1
   iam:
-    role: arn:aws:iam::155495621271:role/bonzairole
+    role: arn:aws:iam::621302123901:role/BonzaiLambdaRole
 
 functions:
   bookRoom:
