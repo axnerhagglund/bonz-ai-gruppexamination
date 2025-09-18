@@ -17,7 +17,7 @@ export const handler = async (event) => {
     const command = new DeleteItemCommand({
       TableName: "RoomBookTable",
       Key: {
-        pk: { S: bookingId }, 
+        pk: { S: `BOOKING#${bookingId}` }, 
         sk: { S: "PROFILE" },
       },
       ReturnValues: "ALL_OLD", 

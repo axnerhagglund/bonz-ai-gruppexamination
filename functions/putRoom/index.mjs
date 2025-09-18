@@ -50,7 +50,7 @@ export const handler = async (event) => {
   const command = new UpdateItemCommand({
     TableName:"RoomBookTable",
     Key: {
-      pk: {S: `BOOKING${bookingId}`},
+      pk: {S: `BOOKING#${bookingId}`},
       sk: {S: "PROFILE"}
     },
     UpdateExpression:"SET guests = :guests, checkinDate = :checkinDate, checkoutDate = :checkoutDate, #rooms = :rooms, totalPrice = :totalPrice, days = :days",
