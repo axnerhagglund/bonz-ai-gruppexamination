@@ -88,7 +88,7 @@ DELETE - https://05n1x9pvcj.execute-api.eu-north-1.amazonaws.com/api/bookings/{i
 
 ```json
 {
-  "message": "Booking BOOKINGabc12 updated successfully"
+  "message": "Booking abc12 updated successfully"
 }
 ```
 
@@ -103,7 +103,7 @@ DELETE - https://05n1x9pvcj.execute-api.eu-north-1.amazonaws.com/api/bookings/{i
 ```json
 {
   "message": "Booking cancelled successfully",
-  "bookingId": "BOOKINGabc12"
+  "bookingId": "abc12"
 }
 ```
 
