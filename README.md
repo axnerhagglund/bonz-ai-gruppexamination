@@ -1,69 +1,144 @@
-<!--
-title: 'AWS Simple HTTP Endpoint example in NodeJS'
-description: 'This template demonstrates how to make a simple HTTP API with Node.js running on AWS Lambda and API Gateway using the Serverless Framework.'
-layout: Doc
-framework: v4
-platform: AWS
-language: nodeJS
-authorLink: 'https://github.com/serverless'
-authorName: 'Serverless, Inc.'
-authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
--->
+# Bonz.ai Booking API
 
-# Serverless Framework Node HTTP API on AWS
+Serverless bokningssystem byggt i AWS med **Lambda, API Gateway och DynamoDB**. Detta repo innehåller kod och infrastruktur för att skapa, läsa, uppdatera och ta bort hotellbokningar.
 
-This template demonstrates how to make a simple HTTP API with Node.js running on AWS Lambda and API Gateway using the Serverless Framework.
+## 📍 Endpoints
 
-This template does not include any kind of persistence (database). For more advanced examples, check out the [serverless/examples repository](https://github.com/serverless/examples/) which includes Typescript, Mongo, DynamoDB and other examples.
-
-## Usage
-
-### Deployment
-
-In order to deploy the example, you need to run the following command:
+Alla endpoints är tillgängliga under samma bas-URL efter deploy. 
 
 ```
-serverless deploy
+POST - https://05n1x9pvcj.execute-api.eu-north-1.amazonaws.com/api/bookings
+GET - https://05n1x9pvcj.execute-api.eu-north-1.amazonaws.com/api/bookings
+PUT - https://05n1x9pvcj.execute-api.eu-north-1.amazonaws.com/api/bookings/{id}
+DELETE - https://05n1x9pvcj.execute-api.eu-north-1.amazonaws.com/api/bookings/{id}
 ```
 
-After running deploy, you should see output similar to:
+### 1. Skapa bokning
 
-```
-Deploying "serverless-http-api" to stage "dev" (us-east-1)
+**POST** `/api/bookings`
 
-✔ Service deployed to stack serverless-http-api-dev (91s)
-
-endpoint: GET - https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/
-functions:
-  hello: serverless-http-api-dev-hello (1.6 kB)
-```
-
-_Note_: In current form, after deployment, your API is public and can be invoked by anyone. For production deployments, you might want to configure an authorizer. For details on how to do that, refer to [HTTP API (API Gateway V2) event docs](https://www.serverless.com/framework/docs/providers/aws/events/http-api).
-
-### Invocation
-
-After successful deployment, you can call the created application via HTTP:
-
-```
-curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/
-```
-
-Which should result in response similar to:
+**Request body:**
 
 ```json
-{ "message": "Go Serverless v4! Your function executed successfully!" }
+{
+  "name": "Anna Andersson",
+  "email": "anna@example.com",
+  "guests": 3,
+  "single": 1,
+  "double": 1,
+  "suite": 0,
+  "days": 2
+}
 ```
 
-### Local development
+**Response:**
 
-The easiest way to develop and test your function is to use the `dev` command:
-
+```json
+{
+  "message": "Anna Andersson, the room has been booked",
+  "bookingId": "BOOKINGabc12",
+  "totalPrice": "Total price will be 3000",
+  "checkinDate": "2025-09-18T08:19:01.478Z",
+  "checkoutDate": "2025-09-20T08:19:01.478Z",
+  "guests": 3,
+  "rooms": { "single": 1, "double": 1, "suite": 0 }
+}
 ```
-serverless dev
+
+---
+
+### 2. Hämta alla bokningar
+
+**GET** `/api/bookings`
+
+**Response (exempel):**
+
+```json
+[
+  {
+    "bookingId": "BOOKINGabc12",
+    "name": "Anna Andersson",
+    "email": "anna@example.com",
+    "guests": 3,
+    "days": 2,
+    "totalPrice": 3000
+  }
+]
 ```
 
-This will start a local emulator of AWS Lambda and tunnel your requests to and from AWS Lambda, allowing you to interact with your function as if it were running in the cloud.
+---
 
-Now you can invoke the function as before, but this time the function will be executed locally. Now you can develop your function locally, invoke it, and see the results immediately without having to re-deploy.
+### 3. Uppdatera bokning
 
-When you are done developing, don't forget to run `serverless deploy` to deploy the function to the cloud.
+**PUT** `/api/bookings/{id}`
+
+**Request body (exempel):**
+
+```json
+{
+  "guests": 2,
+  "single": 0,
+  "double": 1,
+  "suite": 0,
+  "days": 3
+}
+```
+
+**Response:**
+
+```json
+{
+  "message": "Booking BOOKINGabc12 updated successfully"
+}
+```
+
+---
+
+### 4. Avboka
+
+**DELETE** `/api/bookings/{id}`
+
+**Response:**
+
+```json
+{
+  "message": "Booking cancelled successfully",
+  "bookingId": "BOOKINGabc12"
+}
+```
+
+---
+
+## 📖 Affärslogik
+
+* Enkelrum: 1 gäst, 500 kr/natt
+* Dubbelrum: 2 gäster, 1000 kr/natt
+* Svit: 3 gäster, 1500 kr/natt
+
+Antalet gäster får vara **mindre än eller lika med** rummens kapacitet, men aldrig fler.
+
+---
+
+## 🚀 Teknisk info
+
+* Node.js 20.x
+* AWS Lambda
+* API Gateway (httpApi)
+* DynamoDB (tabell `RoomBookTable` med `pk` och `sk`)
+
+---
+
+## 🧑‍🤝‍🧑 Arbetssätt
+
+Vi har jobbat i grupp under hela projektet. Vi gruppkodade tillsammans varje dag förutom onsdagen, då alla arbetade individuellt på sina respektive tasks.
+
+---
+
+## 🧪 Test i Insomnia
+
+1. **POST** för att skapa en bokning → spara `bookingId` från svaret.
+2. **GET** för att se alla bokningar.
+3. **PUT** `/api/bookings/{bookingId}` för att ändra bokningen.
+4. **DELETE** `/api/bookings/{bookingId}` för att avboka.
+
+> Testerna kan köras direkt i Insomnia/Postman. Ingen åtkomst till AWS Console krävs för läraren.
