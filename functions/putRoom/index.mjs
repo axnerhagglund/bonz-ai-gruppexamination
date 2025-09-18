@@ -74,6 +74,11 @@ export const handler = async (event) => {
     ReturnValues: "ALL_NEW"
   
   })
+  const rooms = {
+      single: single,
+      double: double,
+      suite: suite,
+    };
   
   await client.send(command)
 
@@ -84,6 +89,7 @@ export const handler = async (event) => {
       booking: {guests: body.guests,
                 checkindate: checkinDate,
                 checkoutdate: checkoutDate,
+                rooms
                 }
     }),
   };
