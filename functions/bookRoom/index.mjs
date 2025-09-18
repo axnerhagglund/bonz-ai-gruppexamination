@@ -50,6 +50,7 @@ export const handler = async (event) => {
         suite * roomPrice.suite) *
       days;
 
+    checkoutDate.setDate(today.getDate() + days);
     const command = new PutItemCommand({
       TableName: "RoomBookTable",
       Item: {
@@ -73,7 +74,6 @@ export const handler = async (event) => {
       },
     });
 
-    checkoutDate.setDate(today.getDate() + days);
     const rooms = {
       single: single,
       double: double,
@@ -91,7 +91,7 @@ export const handler = async (event) => {
         checkoutDate: checkoutDate,
         guests: guests,
         rooms: rooms,
-
+        bookingId: bookingId,
       }),
     };
   } catch (error) {
