@@ -1,4 +1,4 @@
-import { PutItemCommand } from "@aws-sdk/client-dynamodb";
+import { PutItemCommand, QueryCommand } from "@aws-sdk/client-dynamodb";
 import { client } from "../../services/db.mjs";
 import { nanoid } from "nanoid";
 
@@ -51,6 +51,36 @@ export const handler = async (event) => {
       days;
 
     checkoutDate.setDate(today.getDate() + days);
+
+    const query = new QueryCommand({
+      TableName: "RoomBookTable",
+      IndexName: "bookingIndex",
+      KeyConditionExpression: "booking = :booking",
+      ExpressionAttributeValues: {
+        ":booking": { S: "BOOKING" },
+      },
+    });
+
+    const result = await client.send(query);
+    let totalRoomsBooked = 0;
+    result.Items.forEach((item) => {
+      totalRoomsBooked += Number(item.rooms.M.single.N);
+      totalRoomsBooked += Number(item.rooms.M.double.N);
+      totalRoomsBooked += Number(item.rooms.M.suite.N);
+    });
+const newTotal = totalRoomsBooked + single + double + suite;
+
+    if (newTotal > 20) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: `Only 20 rooms is available for booking. Current: ${totalRoomsBooked}, trying to add ${
+            single + double + suite
+          }` ,
+        }),
+      };
+    }
+
     const command = new PutItemCommand({
       TableName: "RoomBookTable",
       Item: {
@@ -79,14 +109,13 @@ export const handler = async (event) => {
       double: double,
       suite: suite,
     };
-
     await client.send(command);
 
     return {
       statusCode: 200,
       body: JSON.stringify({
         message: `${name}, the room has been booked`,
-        totalPrice: `Total price will be ${totalPrice}SEK`,
+        totalPrice: `Total price will be ${totalPrice}`,
         checkinDate: checkinDate,
         checkoutDate: checkoutDate,
         guests: guests,
