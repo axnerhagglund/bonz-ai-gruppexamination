@@ -7,10 +7,10 @@ Serverless bokningssystem byggt i AWS med **Lambda, API Gateway och DynamoDB**. 
 Alla endpoints är tillgängliga under samma bas-URL efter deploy. 
 
 ```
-POST - https://05n1x9pvcj.execute-api.eu-north-1.amazonaws.com/api/bookings
-GET - https://05n1x9pvcj.execute-api.eu-north-1.amazonaws.com/api/bookings
-PUT - https://05n1x9pvcj.execute-api.eu-north-1.amazonaws.com/api/bookings/{id}
-DELETE - https://05n1x9pvcj.execute-api.eu-north-1.amazonaws.com/api/bookings/{id}
+POST - https://ekk8t4ai45.execute-api.eu-north-1.amazonaws.com/api/bookings
+GET - https://ekk8t4ai45.execute-api.eu-north-1.amazonaws.com/api/bookings
+PUT - https://ekk8t4ai45.execute-api.eu-north-1.amazonaws.com/api/bookings/{id}
+DELETE - https://ekk8t4ai45.execute-api.eu-north-1.amazonaws.com/api/bookings/{id}
 ```
 
 ### 1. Skapa bokning
