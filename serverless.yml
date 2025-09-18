@@ -1,5 +1,8 @@
 # "org" ensures this Service is used with the correct Serverless Framework Access Key.
-org: 
+
+
+org: kujje
+
 # "service" is the name of this project. This will also be added to your AWS resource names.
 service: bonzaigruppex
 
@@ -8,7 +11,9 @@ provider:
   runtime: nodejs20.x
   region: eu-north-1
   iam:
-    role: 
+
+    role: arn:aws:iam::621302123901:role/BonzaiLambdaRole
+
 
 functions:
   bookRoom:
@@ -50,9 +55,26 @@ resources:
             AttributeType: S
           - AttributeName: sk
             AttributeType: S
+          - AttributeName: booking
+            AttributeType: S
         KeySchema:
           - AttributeName: pk
             KeyType: HASH # HASH = Partition key
           - AttributeName: sk
             KeyType: RANGE # RANGE = Sort key
-        BillingMode: PAY_PER_REQUEST
+        GlobalSecondaryIndexes:
+          - IndexName: bookingIndex
+            KeySchema:
+              - AttributeName: booking
+                KeyType: HASH
+              - AttributeName: pk
+                KeyType: RANGE
+            Projection:
+              ProjectionType: INCLUDE
+              NonKeyAttributes:
+                - name
+                - checkinDate
+                - checkoutDate
+                - guests
+                - rooms
+        BillingMode: PAY_PER_REQUEST 

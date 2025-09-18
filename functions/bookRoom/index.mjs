@@ -17,6 +17,7 @@ const roomCapacity = {
 export const handler = async (event) => {
   try {
     const booking = JSON.parse(event.body);
+
     const bookingId = nanoid(5);
     let today = new Date();
     let checkinDate = today;
@@ -26,6 +27,7 @@ export const handler = async (event) => {
     const double = Number(booking.double);
     const suite = Number(booking.suite);
     const guests = Number(booking.guests);
+    const name = String(booking.name);
     let days = Number(booking.days);
 
     const maxGuests =
@@ -51,8 +53,9 @@ export const handler = async (event) => {
     const command = new PutItemCommand({
       TableName: "RoomBookTable",
       Item: {
-        pk: { S: `BOOKING${bookingId}` },
+        pk: { S: `BOOKING#${bookingId}` },
         sk: { S: "PROFILE" },
+        booking: { S: "BOOKING" },
         name: { S: String(booking.name) },
         email: { S: String(booking.email) },
         rooms: {
@@ -71,17 +74,24 @@ export const handler = async (event) => {
     });
 
     checkoutDate.setDate(today.getDate() + days);
+    const rooms = {
+      single: single,
+      double: double,
+      suite: suite,
+    };
 
     await client.send(command);
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        message: "Room booked successfully!",
+        message: `${name}, the room has been booked`,
         totalPrice: `Total price will be ${totalPrice}`,
         checkinDate: checkinDate,
         checkoutDate: checkoutDate,
-        
+        guests: guests,
+        rooms: rooms,
+
       }),
     };
   } catch (error) {
