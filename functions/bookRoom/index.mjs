@@ -86,7 +86,7 @@ export const handler = async (event) => {
       statusCode: 200,
       body: JSON.stringify({
         message: `${name}, the room has been booked`,
-        totalPrice: `Total price will be ${totalPrice}`,
+        totalPrice: `Total price will be ${totalPrice}SEK`,
         checkinDate: checkinDate,
         checkoutDate: checkoutDate,
         guests: guests,
