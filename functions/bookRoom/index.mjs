@@ -91,6 +91,7 @@ export const handler = async (event) => {
         checkoutDate: checkoutDate,
         guests: guests,
         rooms: rooms,
+
       }),
     };
   } catch (error) {
