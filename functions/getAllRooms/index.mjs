@@ -1,6 +1,21 @@
 import { client } from "../../services/db.mjs";
 import { QueryCommand } from "@aws-sdk/client-dynamodb";
 
+function formatBooking(item) {
+  return {
+    bookingId: item.pk.S,
+    checkinDate: item.checkinDate.S,
+    checkoutDate: item.checkoutDate.S,
+    guests: Number(item.guests.N),
+    rooms: {
+      single: Number(item.rooms.M.single.N),
+      double: Number(item.rooms.M.double.N),
+      suite: Number(item.rooms.M.suite.N),
+    },
+    name: item.name.S,
+  };
+}
+
 export const handler = async (event) => {
   try {
     const command = new QueryCommand({
@@ -13,13 +28,13 @@ export const handler = async (event) => {
       },
     });
 
-    const bookings = await client.send(command);
+    const result = await client.send(command);
 
     return {
       statusCode: 200,
       body: JSON.stringify({
         success: true,
-        bookings,
+        bookings: result.Items.map(formatBooking),
       }),
     };
 
