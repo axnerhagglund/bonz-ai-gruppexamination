@@ -127,7 +127,7 @@ Antalet gäster får vara **mindre än eller lika med** rummens kapacitet, men a
 
 ## 🧑‍🤝‍🧑 Arbetssätt
 
-Vi har jobbat i grupp under hela projektet. Vi gruppkodade tillsammans varje dag förutom onsdagen, då alla arbetade individuellt på sina respektive tasks. Detta gjorde att vi fick både samarbete och individuell fördjupning i lösningen.
+Vi har jobbat i grupp under hela projektet. Vi gruppkodade tillsammans varje dag förutom onsdagen, då alla arbetade individuellt på sina respektive tasks.
 
 ---
 
